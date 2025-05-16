@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - View Users | DentalAI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+       
+            body {
+                background: #f4f8fb;
+                font-family: 'Segoe UI', Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+        
+            .admin-nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #203a43;
+                color: #fff;
+                padding: 18px 32px;
+                font-size: 1.1rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+        
+            .admin-nav a {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: 500;
+                background-color: rgba(255, 255, 255, 0.15);
+                padding: 6px 12px;
+                border-radius: 6px;
+                transition: background-color 0.2s ease;
+            }
+        
+            .admin-nav a:hover {
+                background-color: rgba(255, 255, 255, 0.25);
+            }
+        
+            .admin-main {
+                margin-top: 100px;
+                max-width: 1000px;
+                margin: 40px auto;
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                padding: 32px 28px;
+            }
+        
+            .section-title {
+                color: #1976D2;
+                font-size: 1.5rem;
+                margin-bottom: 24px;
+                border-bottom: 2px solid #e3f2fd;
+                padding-bottom: 8px;
+            }
+        
+            .search-bar {
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+            }
+        
+            .search-bar input {
+                padding: 10px 14px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                width: 320px;
+                font-size: 1rem;
+                transition: border-color 0.2s ease;
+            }
+        
+            .search-bar input:focus {
+                outline: none;
+                border-color: #1976D2;
+                box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+            }
+        
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background: #fafbfc;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            }
+        
+            th, td {
+                padding: 14px 12px;
+                border-bottom: 1px solid #e0e0e0;
+                text-align: left;
+                font-size: 0.97rem;
+            }
+        
+            th {
+                background: #f0f4f8;
+                color: #1976D2;
+                font-weight: 600;
+            }
+        
+            tr:last-child td {
+                border-bottom: none;
+            }
+        
+            .user-type {
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+            }
+        
+            .user-type.doctor {
+                background: #1976D2;
+            }
+        
+            .user-type.patient {
+                background: #43a047;
+            }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="admin-nav">
+        <div><b>DentalAI</b> | Admin - View Users</div>
+        <div><a href="admin.html" style="color:#fff;text-decoration:underline;">Back to Doctor Management</a></div>
+    </div>
+    <div class="admin-main">
+        <h2 class="section-title">User Database</h2>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search by name or email...">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>User Type</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                <!-- Users will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+    function fetchUsers(search = '') {
+        fetch(`http://127.0.0.1:5000/api/users?search=${encodeURIComponent(search)}`)
+            .then(res => res.json())
+            .then(users => {
+                const tbody = document.getElementById('user-table-body');
+                tbody.innerHTML = '';
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">No users found.</td></tr>';
+                    return;
+                }
+                users.forEach(u => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${u.id}</td>
+                        <td>${u.name}</td>
+                        <td>${u.email}</td>
+                        <td><span class="user-type ${u.is_doctor ? 'doctor' : 'patient'}">${u.is_doctor ? 'Doctor' : 'Patient'}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    }
+    document.getElementById('search-input').addEventListener('input', function() {
+        fetchUsers(this.value);
+    });
+    // Initial load
+    fetchUsers();
+    </script>
+</body>
+</html> 

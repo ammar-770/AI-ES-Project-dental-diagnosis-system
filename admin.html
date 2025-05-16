@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Doctors | DentalAI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #203a43;
+            color: #fff;
+            padding: 18px 32px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .admin-main {
+            margin-top: 100px;
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+            padding: 32px 24px;
+        }
+        .section-title {
+            color: #1976D2;
+            margin-bottom: 18px;
+        }
+        .doctor-list {
+            margin-bottom: 32px;
+        }
+        .doctor-item {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .doctor-actions button {
+            margin-left: 8px;
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+        .doctor-actions button.delete {
+            background: #e53935;
+        }
+        .add-form {
+            margin-bottom: 32px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .add-form input, .add-form textarea {
+            margin: 6px 0;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .add-form button {
+            margin-top: 10px;
+            background: #1976D2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-nav">
+        <div><b>DentalAI</b> | Admin - Manage Doctors</div>
+    </div>
+    <div class="admin-main">
+        <h2 class="section-title">Doctors</h2>
+        <form class="add-form" id="add-doctor-form">
+            <h3>Add New Doctor</h3>
+            <input type="text" id="doc-name" placeholder="Name" required>
+            <input type="text" id="doc-specialty" placeholder="Specialty" required>
+            <input type="number" id="doc-experience" placeholder="Experience (years)" required>
+            <input type="number" id="doc-rating" placeholder="Rating (0-5)" step="0.1" required>
+            <input type="text" id="doc-contact" placeholder="Contact" required>
+            <textarea id="doc-bio" placeholder="Bio"></textarea>
+            <button type="submit">Add Doctor</button>
+        </form>
+        <div class="doctor-list" id="doctor-list"></div>
+    </div>
+    <script>
+    function fetchDoctors() {
+        fetch('http://127.0.0.1:5000/api/doctors')
+            .then(res => res.json())
+            .then(doctors => {
+                const list = document.getElementById('doctor-list');
+                list.innerHTML = '';
+                doctors.forEach(doc => {
+                    const div = document.createElement('div');
+                    div.className = 'doctor-item';
+                    div.innerHTML = `
+                        <div>
+                            <b>${doc.name}</b> | ${doc.specialty} | ${doc.experience} yrs | Rating: ${doc.rating} | Contact: ${doc.contact}<br>
+                            <small>${doc.bio || ''}</small>
+                        </div>
+                        <div class="doctor-actions">
+                            <button onclick="editDoctor(${doc.id})">Edit</button>
+                            <button class="delete" onclick="deleteDoctor(${doc.id})">Delete</button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            });
+    }
+    document.getElementById('add-doctor-form').onsubmit = function(e) {
+        e.preventDefault();
+        const name = document.getElementById('doc-name').value;
+        const specialty = document.getElementById('doc-specialty').value;
+        const experience = document.getElementById('doc-experience').value;
+        const rating = document.getElementById('doc-rating').value;
+        const contact = document.getElementById('doc-contact').value;
+        const bio = document.getElementById('doc-bio').value;
+        fetch('http://127.0.0.1:5000/api/doctors', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, specialty, experience, rating, contact, bio })
+        })
+        .then(() => {
+            fetchDoctors();
+            e.target.reset();
+        });
+    };
+    function deleteDoctor(id) {
+        fetch(`http://127.0.0.1:5000/api/doctors/${id}`, { method: 'DELETE' })
+            .then(() => fetchDoctors());
+    }
+    function editDoctor(id) {
+        // For demo: just alert, can be expanded to a modal form
+        alert('Edit doctor feature coming soon!');
+    }
+    fetchDoctors();
+    </script>
+</body>
+</html> 
