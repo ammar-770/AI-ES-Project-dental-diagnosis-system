@@ -8,7 +8,6 @@ This project is a smart, web-based healthcare assistant that combines Computer V
 
 > 🔗 [Watch on YouTube](https://youtu.be/UuuptL5nYww)
 
-
 📌 Key Features
 
 - Image Classification: Detects conditions like cavities, gingivitis, ulcers, etc., from intraoral images using a CNN model (ResNet50V2).
@@ -25,3 +24,4 @@ This project is a smart, web-based healthcare assistant that combines Computer V
 - Utilities: NumPy, Pillow, Matplotlib, Seaborn, scikit-learn
 - Model Training: Jupyter Notebooks for reproducibility
 
+https://youtu.be/UuuptL5nYww
