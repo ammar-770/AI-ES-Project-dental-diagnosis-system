@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Dental  Analysis System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        }
+        body {
+            background-color: none ;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>🦷 DentalAI</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" style="color:#f1f4f5">Upload image</a></li>
+            <li><a href="about.html" style="color:#f1f4f5">About Us</a></li>
+            <li><a href="landing.html" style="color:#f1f4f5">Home</a></li>
+            
+        </ul>
+    </nav>
+    <main class="main-content" >
+        <h1 style="color: #f1f4f5;">Contact Us</h1>
+        <form class="contact-form">
+            <label for="contact-name" style="color: #f1f4f5;">Name</label>
+            <input type="text" id="contact-name" placeholder="Your Name" required>
+            <label for="contact-email" style="color: #f1f4f5;">Email</label>
+            <input type="email" id="contact-email" placeholder="Your Email" required>
+            <label for="contact-message" style="color: #f1f4f5;">Message</label>
+            <textarea id="contact-message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit" >Send Message</button>
+        </form>
+        <div class="contact-info" style="color: #f1f4f5;">
+            <p>Email: <a href="mailto:info@dentalai.com">info@dentalai.com</a></p>
+            <p>Phone: +1 234 567 8901</p>
+        </div>
+    </main>
+    <div id="particles-js"></div>
+   
+   
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentalAI  Analysis System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ...existing styles... */
+        .user-profile {
+            position: fixed;
+            top: 24px;
+            right: 36px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+            border-radius: 24px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            font-weight: 500;
+            font-size: 1.08em;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .user-profile .profile-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2196F3;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-right: 0;
+            transition: margin-right 0.2s;
+        }
+        .user-profile .profile-details {
+            display: none;
+            margin-left: 12px;
+            white-space: nowrap;
+        }
+        .user-profile.show-details .profile-details {
+            display: inline;
+        }
+        .user-profile.show-details .profile-circle {
+            margin-right: 10px;
+        }
+        @media (max-width: 600px) {
+            .user-profile { right: 8px; top: 8px; padding: 7px 10px; font-size: 0.98em; }
+            .user-profile .profile-circle { width: 28px; height: 28px; font-size: 0.98em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-profile" id="user-profile">
+        <span class="profile-circle" id="profile-circle">PA</span>
+        <span class="profile-details" id="profile-details">Patient Name (Patient)</span>
+    </div>
+    <nav class="sidebar">
+        <div class="logo">
+            <h2 style="color: #3498db;">🦷 DentalAI</h2>
+        </div>
+        <ul class="nav-links">
+            <li class="active" data-page="upload"><a href="#">Upload Image</a></li>
+            <li><a href="landing.html" style="color: white;">Home</a></li>
+            <li><a href="about.html" style="color: white;">About</a></li>
+            <li><a href="contect.html" style="color: white;">Contact</a></li>
+            <li><a href="pharmacy.html" style="color: white;">Pharmacy</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 240px;">
+        <div id="upload-page" class="page active">
+            <h1>Upload Dental Image</h1>
+            <div class="upload-controls" id="upload-controls">
+                <div class="upload-left">
+                    <div class="upload-box" id="drop-zone">
+                        <img src="static/images/upload-icon.png" alt="Upload" id="upload-icon">
+                        <p>Drag & Drop your dental image here</p>
+                        <p>or</p>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                        <button class="upload-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
+                    </div>
+                    <div id="preview-container" class="hidden">
+                        <img id="preview-image" alt="Preview">
+                    </div>
+                    <button class="analyze-btn hidden" id="analyze-btn" onclick="analyzeImage()">Analyze Image</button>
+                </div>
+            </div>
+            <div id="results-container" class="hidden">
+                <h2>Analysis Results</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Detected Conditions</h3>
+                        <ul id="conditions-list"></ul>
+                    </div>
+                    <div class="result-card">
+                        <h3>Confidence Scores</h3>
+                        <canvas id="confidence-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 24px; text-align: center;">
+                <a href="pharmacy.html" class="pharmacy-btn" style="display:inline-block; padding:12px 28px; background:#2196F3; color:#fff; border-radius:6px; font-size:18px; text-decoration:none; font-weight:600; transition:background 0.2s;">Visit Our Pharmacy</a>
+            </div>
+        </div>
+
+        <!-- Chatbot Messages Bar (above the input box) -->
+        <div id="chat-messages-bar" class="chat-messages-bar"></div>
+        <!-- Minimal Chatbar at the bottom -->
+        <div id="chatbar-container" class="chatbar-container">
+            <div class="chatbar-prompt">Feel free to ask me anything about dental care!</div>
+            <div class="chat-input-group">
+                <input type="text" id="user-message" placeholder="Type your message...">
+                <button id="send-btn">&#8593;</button>
+            </div>
+        </div>
+
+        <div id="records-page" class="page">
+            <h1>Patient Records</h1>
+            <div class="search-container">
+                <input type="text" id="patient-search" placeholder="Enter Patient ID">
+                <button onclick="searchPatient()" type="button">Search</button>
+            </div>
+            <div id="patient-info" class="hidden">
+                <!-- Patient information will be populated here -->
+            </div>
+        </div>
+
+        <div id="logs-page" class="page">
+            <h1>Access Logs</h1>
+            <div class="logs-container">
+                <table id="logs-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Timestamp</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-body">
+                        <!-- Logs will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add this to your sign-up form section -->
+        <form id="signup-form" class="auth-form">
+            <h2>Sign Up</h2>
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" required>
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required>
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required>
+            <div style="margin: 12px 0;">
+                <label><input type="radio" name="user-type" value="patient" checked> Patient</label>
+                <label style="margin-left: 18px;"><input type="radio" name="user-type" value="doctor"> Doctor</label>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </main>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="script.js"></script>
+    <script>
+        // Set user profile info in top right
+        const userName = localStorage.getItem('user_name') || 'User';
+        const isDoctor = localStorage.getItem('is_doctor') === 'true';
+        const initials = userName.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+        document.getElementById('profile-circle').textContent = initials;
+        const userType = isDoctor ? 'Doctor' : 'Patient';
+        document.getElementById('profile-details').textContent = `${userName} (${userType})`;
+        // Patient icon color for patient, doctor icon for doctor (optional)
+        // Toggle details on click
+        const userProfile = document.getElementById('user-profile');
+        userProfile.onclick = function() {
+            userProfile.classList.toggle('show-details');
+        };
+    </script>
+</body>
+</html>

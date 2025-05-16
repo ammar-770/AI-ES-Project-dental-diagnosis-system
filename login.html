@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DentalAI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 32px 28px 24px 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #1976D2;
+            margin-bottom: 24px;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        .login-container input[type="email"],
+        .login-container input[type="password"],
+        .login-container input[type="text"],
+        .login-container input.input-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .login-btn:hover {
+            background: #1769aa;
+        }
+        .signup-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #1976D2;
+            text-decoration: none;
+        }
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        }
+        .user-type-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+        .user-type-row label {
+            margin: 0;
+            font-weight: 500;
+            color: #1976D2;
+            cursor: pointer;
+        }
+        .user-type-row input[type="radio"] {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="login-container">
+        <h2>Login to DentalAI</h2>
+        <form id="login-form" onsubmit="event.preventDefault(); login();">
+            <div class="user-type-row">
+                <label><input type="radio" name="user-type" value="patient" checked> Patient</label>
+                <label><input type="radio" name="user-type" value="doctor"> Doctor</label>
+                <label><input type="radio" name="user-type" value="admin"> Admin</label>
+            </div>
+            <div id="admin-keyword-div" style="display:none; margin-bottom: 12px;">
+                <label for="admin-keyword">Admin Keyword</label>
+                <input type="text" id="admin-keyword" class="input-box" placeholder="Enter admin keyword">
+            </div>
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" required>
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" required>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS("particles-js", {
+        "particles": {
+          "number": { "value": 80 },
+          "size": { "value": 3 },
+          "move": { "speed": 1 },
+          "line_linked": { "enable": true }
+        },
+        "interactivity": {
+          "events": {
+            "onhover": { "enable": true, "mode": "repulse" }
+          }
+        }
+      });
+    </script>
+    <script>
+    // Show/hide admin keyword field
+    document.querySelectorAll('input[name="user-type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('admin-keyword-div').style.display = (this.value === 'admin') ? 'block' : 'none';
+        });
+    });
+    function login() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const userType = document.querySelector('input[name="user-type"]:checked').value;
+        let body = { email, password, user_type: userType };
+        if (userType === 'admin') {
+            const keyword = document.getElementById('admin-keyword').value;
+            if (keyword !== 'ammar') {
+                alert('Invalid admin keyword!');
+                return;
+            }
+            body.keyword = keyword;
+        }
+        fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+        .then(res => res.json().then(data => ({status: res.status, body: data})))
+        .then(({status, body}) => {
+            if (status === 200) {
+                localStorage.setItem('user_id', body.user_id);
+                localStorage.setItem('user_name', body.name);
+                localStorage.setItem('is_doctor', body.is_doctor);
+                if (userType === 'admin') {
+                    window.location.href = 'admin.html';
+                } else if (body.is_doctor) {
+                    window.location.href = 'doctor_dashboard.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert(body.message || 'Login failed');
+            }
+        })
+        .catch(() => alert('Login failed.'));
+    }
+    </script>
+</body>
+</html> 
