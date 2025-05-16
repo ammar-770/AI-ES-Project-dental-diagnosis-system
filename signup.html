@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - DentalAI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .signup-container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 32px 28px 24px 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+        }
+        .signup-container h2 {
+            text-align: center;
+            color: #1976D2;
+            margin-bottom: 24px;
+        }
+        .signup-container label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        .signup-container input[type="text"],
+        .signup-container input[type="email"],
+        .signup-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .user-type-container {
+            margin-bottom: 18px;
+        }
+        .user-type-container label {
+            display: inline-block;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .signup-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .signup-btn:hover {
+            background: #1769aa;
+        }
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #1976D2;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="signup-container">
+        <h2>Create Your DentalAI Account</h2>
+        <form id="signup-form" onsubmit="event.preventDefault(); signup();">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" required>
+            
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required>
+            
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required>
+            
+            <div class="user-type-container">
+                <label>
+                    <input type="radio" name="user-type" value="patient" checked> Patient
+                </label>
+                <label>
+                    <input type="radio" name="user-type" value="doctor"> Doctor
+                </label>
+            </div>
+            
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+        <a href="login.html" class="login-link">Already have an account? Login</a>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS("particles-js", {
+        "particles": {
+          "number": { "value": 80 },
+          "size": { "value": 3 },
+          "move": { "speed": 1 },
+          "line_linked": { "enable": true }
+        },
+        "interactivity": {
+          "events": {
+            "onhover": { "enable": true, "mode": "repulse" }
+          }
+        }
+      });
+    </script>
+    <script>
+    function signup() {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const is_doctor = document.querySelector('input[name="user-type"]:checked').value === 'doctor';
+        fetch('http://127.0.0.1:5000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, is_doctor })
+        })
+        .then(res => res.json().then(data => ({status: res.status, body: data})))
+        .then(({status, body}) => {
+            if (status === 200) {
+                // Auto-login after signup
+                fetch('http://127.0.0.1:5000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                })
+                .then(res => res.json().then(data => ({status: res.status, body: data})))
+                .then(({status, body}) => {
+                    if (status === 200) {
+                        localStorage.setItem('user_id', body.user_id);
+                        localStorage.setItem('user_name', body.name);
+                        localStorage.setItem('is_doctor', body.is_doctor);
+                        if (body.is_doctor) {
+                            window.location.href = 'doctor_dashboard.html';
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    } else {
+                        alert('Signup succeeded but login failed. Please try logging in.');
+                    }
+                });
+            } else {
+                alert(body.message || 'Signup failed');
+            }
+        })
+        .catch(() => alert('Signup failed.'));
+    }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentalAI Pharmacy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        .pharmacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+        .medicine-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px 18px 18px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.2s;
+        }
+        .medicine-card:hover {
+            box-shadow: 0 4px 16px rgba(33,150,243,0.13);
+        }
+        .medicine-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            background: #fafafa;
+            margin-bottom: 14px;
+        }
+        .medicine-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1976D2;
+            margin-bottom: 6px;
+        }
+        .disease-label {
+            font-size: 0.98em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .medicine-desc {
+            font-size: 0.97em;
+            color: #444;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .order-btn {
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .order-btn:hover {
+            background: #1769aa;
+        }
+        .main-content {
+            padding-bottom: 120px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>🦷 DentalAI</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" style="color:#fafafa">Upload Image</a></li>
+            <li><a href="landing.html" style="color:#fafafa">Home</a></li>
+            <li><a href="about.html" style="color:#fafafa">About</a></li>
+            <li><a href="contect.html" style="color:#fafafa">Contact</a></li>
+            <li class="active"><a href="#" style="color:#fafafa">Pharmacy</a></li>
+        </ul>
+    </nav>
+    <main class="main-content" style="overflow-y:auto; min-height:100vh;">
+        <h1>Pharmacy</h1>
+        <div class="pharmacy-grid">
+            <!-- Cavity -->
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=80&q=80" alt="Amoxicillin">
+                <div class="medicine-title">Amoxicillin</div>
+                <div class="disease-label">For: Cavity</div>
+                <div class="medicine-desc">Antibiotic for bacterial infections in dental cavities.</div>
+                <button class="order-btn" onclick="orderMedicine('Amoxicillin', 'Cavity', 'Antibiotic for bacterial infections in dental cavities.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=80&q=80" alt="Paracetamol">
+                <div class="medicine-title">Paracetamol</div>
+                <div class="disease-label">For: Cavity</div>
+                <div class="medicine-desc">Pain relief for toothache caused by cavities.</div>
+                <button class="order-btn" onclick="orderMedicine('Paracetamol', 'Cavity', 'Pain relief for toothache caused by cavities.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=80&q=80" alt="Ibuprofen">
+                <div class="medicine-title">Ibuprofen</div>
+                <div class="disease-label">For: Cavity</div>
+                <div class="medicine-desc">Anti-inflammatory for pain and swelling in teeth.</div>
+                <button class="order-btn" onclick="orderMedicine('Ibuprofen', 'Cavity', 'Anti-inflammatory for pain and swelling in teeth.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=80&q=80" alt="Clove Oil">
+                <div class="medicine-title">Clove Oil</div>
+                <div class="disease-label">For: Cavity</div>
+                <div class="medicine-desc">Natural remedy for temporary toothache relief.</div>
+                <button class="order-btn" onclick="orderMedicine('Clove Oil', 'Cavity', 'Natural remedy for temporary toothache relief.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=80&q=80" alt="Fluoride Toothpaste">
+                <div class="medicine-title">Fluoride Toothpaste</div>
+                <div class="disease-label">For: Cavity</div>
+                <div class="medicine-desc">Helps prevent and slow down tooth decay.</div>
+                <button class="order-btn" onclick="orderMedicine('Fluoride Toothpaste', 'Cavity', 'Helps prevent and slow down tooth decay.')">Order</button>
+            </div>
+            <!-- Gingivitis -->
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=80&q=80" alt="Chlorhexidine">
+                <div class="medicine-title">Chlorhexidine</div>
+                <div class="disease-label">For: Gingivitis</div>
+                <div class="medicine-desc">Antiseptic mouthwash for gum disease.</div>
+                <button class="order-btn" onclick="orderMedicine('Chlorhexidine', 'Gingivitis', 'Antiseptic mouthwash for gum disease.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=80&q=80" alt="Ibuprofen">
+                <div class="medicine-title">Ibuprofen</div>
+                <div class="disease-label">For: Gingivitis</div>
+                <div class="medicine-desc">Anti-inflammatory for gum swelling and pain.</div>
+                <button class="order-btn" onclick="orderMedicine('Ibuprofen', 'Gingivitis', 'Anti-inflammatory for gum swelling and pain.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=80&q=80" alt="Hydrogen Peroxide Rinse">
+                <div class="medicine-title">Hydrogen Peroxide Rinse</div>
+                <div class="disease-label">For: Gingivitis</div>
+                <div class="medicine-desc">Helps reduce gum inflammation and bacteria.</div>
+                <button class="order-btn" onclick="orderMedicine('Hydrogen Peroxide Rinse', 'Gingivitis', 'Helps reduce gum inflammation and bacteria.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=80&q=80" alt="Vitamin C Tablets">
+                <div class="medicine-title">Vitamin C Tablets</div>
+                <div class="disease-label">For: Gingivitis</div>
+                <div class="medicine-desc">Supports gum healing and reduces bleeding.</div>
+                <button class="order-btn" onclick="orderMedicine('Vitamin C Tablets', 'Gingivitis', 'Supports gum healing and reduces bleeding.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=80&q=80" alt="Salt Water Rinse">
+                <div class="medicine-title">Salt Water Rinse</div>
+                <div class="disease-label">For: Gingivitis</div>
+                <div class="medicine-desc">Natural remedy to soothe gum irritation.</div>
+                <button class="order-btn" onclick="orderMedicine('Salt Water Rinse', 'Gingivitis', 'Natural remedy to soothe gum irritation.')">Order</button>
+            </div>
+            <!-- Ulcer -->
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=80&q=80" alt="Oral Gel">
+                <div class="medicine-title">Oral Gel</div>
+                <div class="disease-label">For: Ulcer</div>
+                <div class="medicine-desc">Topical gel for mouth ulcer pain relief.</div>
+                <button class="order-btn" onclick="orderMedicine('Oral Gel', 'Ulcer', 'Topical gel for mouth ulcer pain relief.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=80&q=80" alt="Benzydamine Mouthwash">
+                <div class="medicine-title">Benzydamine Mouthwash</div>
+                <div class="disease-label">For: Ulcer</div>
+                <div class="medicine-desc">Anti-inflammatory mouthwash for ulcer discomfort.</div>
+                <button class="order-btn" onclick="orderMedicine('Benzydamine Mouthwash', 'Ulcer', 'Anti-inflammatory mouthwash for ulcer discomfort.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=80&q=80" alt="Hydrocortisone Lozenges">
+                <div class="medicine-title">Hydrocortisone Lozenges</div>
+                <div class="disease-label">For: Ulcer</div>
+                <div class="medicine-desc">Reduces inflammation and speeds up healing.</div>
+                <button class="order-btn" onclick="orderMedicine('Hydrocortisone Lozenges', 'Ulcer', 'Reduces inflammation and speeds up healing.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=80&q=80" alt="Vitamin B Complex">
+                <div class="medicine-title">Vitamin B Complex</div>
+                <div class="disease-label">For: Ulcer</div>
+                <div class="medicine-desc">Supports oral tissue repair and healing.</div>
+                <button class="order-btn" onclick="orderMedicine('Vitamin B Complex', 'Ulcer', 'Supports oral tissue repair and healing.')">Order</button>
+            </div>
+            <div class="medicine-card">
+                <img class="medicine-img" src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=80&q=80" alt="Salt Water Rinse">
+                <div class="medicine-title">Salt Water Rinse</div>
+                <div class="disease-label">For: Ulcer</div>
+                <div class="medicine-desc">Natural remedy to soothe mouth ulcers.</div>
+                <button class="order-btn" onclick="orderMedicine('Salt Water Rinse', 'Ulcer', 'Natural remedy to soothe mouth ulcers.')">Order</button>
+            </div>
+        </div>
+    </main>
+    <script>
+    function orderMedicine(medicine, disease, description) {
+        const phone = '933111505333';
+        const msg = `I would like to order ${medicine} for ${disease}. Description: ${description}`;
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+    }
+    </script>
+</body>
+</html> 
